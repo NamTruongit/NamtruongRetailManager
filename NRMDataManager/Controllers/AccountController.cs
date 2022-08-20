@@ -66,7 +66,7 @@ namespace NRMDataManager.Controllers
             };
         }
 
-        // POST api/Account/Logout
+        // POST api/Account/Logout  
         [Route("Logout")]
         public IHttpActionResult Logout()
         {

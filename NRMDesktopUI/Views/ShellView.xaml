@@ -12,24 +12,94 @@
     WindowStartupLocation="CenterScreen"
     
     Title="ShellView" Height="500" Width="820">
+
+    <Window.Resources>
+        <Style x:Key="Main_MenuItem" TargetType="MenuItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type MenuItem}">
+                        <Border x:Name="border"
+                                Background="Transparent"
+                                CornerRadius="5"
+                                BorderThickness="0">
+                            <Grid>
+                                <!-- Icon-->
+                                <ContentPresenter ContentSource="Icon"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Height="22"
+                                        Width="22"
+                                        Margin="8,0,0,0"/>
+                                <!--Text-->
+                                <ContentPresenter ContentSource="Header"
+                                                    TextBlock.Foreground="Black"
+                                                    TextBlock.FontSize="15"
+                                                    TextBlock.FontFamily="Rubik Medium"
+                                                    
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Margin="40,0,0,0"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="#73C269">
+                                </Setter>
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="#F0EB36">
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Border CornerRadius="5"
             Background="White">
         <DockPanel Margin=" 8" >
-    
+
             <Menu DockPanel.Dock="Top"
                   FontSize="20"
+                  
                   Background="Transparent">
-                <MenuItem Header="_File" >
-                
+                <MenuItem Header="File"
+                          Width="100"
+                          Background="Transparent"
+                          Style="{StaticResource Main_MenuItem }">
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/icons8-file-30.png" />
+                    </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Login">
-                
+                <MenuItem Header="Login"
+                          Width="100"
+                          Background="Transparent"
+                          Style="{StaticResource Main_MenuItem }">
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/icon_user3.png" />
+                    </MenuItem.Icon>
                 </MenuItem>
             </Menu>
             <Grid >
-                 <ContentControl x:Name="ActiveItem" Margin="5"/>
+                <Grid.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="9"/>
+                        <Setter Property="BorderBrush" Value="Black"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25*"/>
+                    <ColumnDefinition Width="377*"/>
+                </Grid.ColumnDefinitions>
+                
+                <ContentControl x:Name="ActiveItem" Margin="5 5 5 5" Grid.ColumnSpan="2"/>
             </Grid>
-        
+
         </DockPanel>
     </Border>
 </Window>

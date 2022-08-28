@@ -29,7 +29,8 @@ namespace NRMDesktopUI
 
             _container
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<EventAggregator, EventAggregator>();
+                .Singleton<EventAggregator, EventAggregator>()
+                .Singleton<IAPIHelpers, APIHelpers>();
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass).
                 Where(type => type.Name.EndsWith("ViewModel"))

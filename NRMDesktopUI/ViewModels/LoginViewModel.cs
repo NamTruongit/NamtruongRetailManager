@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using NRMDesktopUI.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,12 @@ namespace NRMDesktopUI.ViewModels
     public class LoginViewModel :Screen
     {
         private string _username;
-
+        private string _password;
+        private IAPIHelpers _apihelper;
+        public LoginViewModel(IAPIHelpers apihelper)
+        {
+            _apihelper = apihelper;
+        }
         public string Username
         {
             get { return _username; }
@@ -21,8 +27,6 @@ namespace NRMDesktopUI.ViewModels
                 NotifyOfPropertyChange(()=>CanLogIn);
             }
         }
-
-        private string _password;
 
         public string Password
         {
@@ -47,9 +51,18 @@ namespace NRMDesktopUI.ViewModels
                 return output;
             }
         }
-        public void LogIn(string userName,string passWord)
+        public async Task LogIn()
         {
-            Console.WriteLine();
+
+            try
+            {
+                var result = await _apihelper.Authenticate(Username, Password);
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex);
+            }
         }
     }
 }

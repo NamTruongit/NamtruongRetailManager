@@ -17,8 +17,9 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type MenuItem}">
                         <Border x:Name="border"
-                    Background="Transparent"
-                    BorderThickness="0">
+                                Background="Transparent"
+                                CornerRadius="5"
+                                BorderThickness="0">
                             <Grid>
                                 <!-- Icon-->
                                 <ContentPresenter ContentSource="Icon"
@@ -29,24 +30,25 @@
                                         Margin="8,0,0,0"/>
                                 <!--Text-->
                                 <ContentPresenter ContentSource="Header"
-                                        TextBlock.Foreground="Black"
-                                        TextBlock.FontSize="15"
-                                        TextBlock.FontFamily="Rubik Medium"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Margin="40,0,0,0"/>
+                                                    TextBlock.Foreground="Black"
+                                                    TextBlock.FontSize="15"
+                                                    TextBlock.FontFamily="Rubik Medium"
+                                                    
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Margin="40,0,0,0"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsHighlighted"
-                            Value="True">
+                                     Value="True">
                                 <Setter Property="Background"
-                            TargetName="border"
-                            Value="#73C269">
+                                        TargetName="border"
+                                        Value="#73C269">
                                 </Setter>
                                 <Setter Property="BorderBrush"
-                            TargetName="border"
-                            Value="#F0EB36">
+                                        TargetName="border"
+                                        Value="#F0EB36">
                                 </Setter>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -57,15 +59,16 @@
 
         <!--Menu Dropdown-->
         <Style x:Key="Service_Menu_Item_With_DropDown"
-    TargetType="MenuItem">
+                TargetType="MenuItem">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type MenuItem}">
                         <Border x:Name="border"
-                    Background="Transparent" 
-                    BorderThickness="0"
-                    Height="30"
-                    Width="145">
+                                Background="Transparent" 
+                                BorderThickness="0"
+                                CornerRadius="6"
+                                Height="30"
+                                Width="145">    
                             <Grid>
                                 <!--Icon-->
                                 <ContentPresenter ContentSource="Icon"
@@ -85,30 +88,29 @@
                                 <!--icon dropdown-->
                                 <Image Source="/Assets/icon_dropdown4 (1).png" 
 
-                        Stretch="None"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Width="200"
-                            Height="200"
-                            Margin="0,0,0,0"/>
+                                        Stretch="None"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Width="200"
+                                        Height="200"
+                                        Margin="0,0,0,0"/>
 
                                 <!--Popup-->
                                 <Popup x:Name="PART_Popup"
-                            AllowsTransparency="True"
-                            IsOpen="{Binding IsSubmenuOpen,RelativeSource={RelativeSource TemplatedParent}}"
-                            Placement="Bottom"
-                            PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}">
+                                        AllowsTransparency="True"
+                                        IsOpen="{Binding IsSubmenuOpen,RelativeSource={RelativeSource TemplatedParent}}"
+                                        Placement="Bottom"
+                                        PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}">
 
                                     <Border x:Name="SubMenuBorder"
-                                Background="#73C269"
-                                BorderBrush="#73C269">
+                                            Background="#73C269"
+                                            BorderBrush="#73C269">  
                                         <ScrollViewer x:Name="SubMenuScrollViewer"
                                                 Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollviewer,TypeInTargetAssembly={x:Type FrameworkElement}}}">
                                             <Grid RenderOptions.ClearTypeHint="Enabled">
                                                 <Canvas HorizontalAlignment="Left"
-                                            VerticalAlignment="Top"/>
+                                                        VerticalAlignment="Top"/>
                                                 <ItemsPresenter x:Name="ItemsPresenter"/>
-
                                             </Grid>
                                         </ScrollViewer>
                                     </Border>
@@ -117,20 +119,20 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSuspendingPopupAnimation"
-                            Value="True">
+                                        Value="True">
                                 <Setter Property="PopupAnimation"
-                                    TargetName="PART_Popup"
-                                    Value="None"/>
+                                        TargetName="PART_Popup"
+                                        Value="None"/>
                             </Trigger>
                             <Trigger Property="IsHighlighted"
-                            Value="True">
+                                        Value="True">
                                 <Setter Property="Background"
-                            TargetName="border"
-                            Value="#73C269"/>
+                                        TargetName="border"
+                                        Value="#73C269"/>
 
                                 <Setter Property="BorderBrush"
-                            TargetName="border"
-                            Value="#73C269"/>
+                                        TargetName="border"
+                                        Value="#73C269"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

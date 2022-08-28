@@ -21,7 +21,8 @@ namespace NRMDesktopUI.Helpers
         private void InitiallizeClient()
         {
             string api = ConfigurationManager.AppSettings["api"];
-            ApiClient = new HttpClient();
+
+            ApiClient = new HttpClient(); 
             ApiClient.BaseAddress = new Uri(api);
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -31,7 +32,7 @@ namespace NRMDesktopUI.Helpers
         {
             var data = new FormUrlEncodedContent(new[]
             {
-                new KeyValuePair<string,string>("grand_type","password"),
+                new KeyValuePair<string,string>("grant_type","password"),
                 new KeyValuePair<string,string>("username",username),
                 new KeyValuePair<string,string>("password",password),
             });

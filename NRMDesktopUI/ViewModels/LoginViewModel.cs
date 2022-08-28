@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NRMDesktopUI.ViewModels
 {
-    public class LoginViewModel :Screen
+    public class LoginViewModel : Screen
     {
         private string _username;
         private string _password;
@@ -39,6 +39,37 @@ namespace NRMDesktopUI.ViewModels
             }
         }
 
+
+        public bool IsErrorVisible
+        {
+            get 
+            {
+                bool output = false;
+                if(ErrorMessage?.Length > 0)
+                {
+                    output = true;
+                }
+                return output;
+            }
+            set { }
+        }
+
+        private string _errorMessage;
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set 
+            {
+                _errorMessage = value;
+                NotifyOfPropertyChange(() => IsErrorVisible);
+                NotifyOfPropertyChange(() => ErrorMessage);
+               
+            }
+        }
+
+
+
         public bool CanLogIn
         {
             get
@@ -53,15 +84,14 @@ namespace NRMDesktopUI.ViewModels
         }
         public async Task LogIn()
         {
-
             try
             {
+                ErrorMessage = "";
                 var result = await _apihelper.Authenticate(Username, Password);
             }
             catch (Exception ex)
             {
-
-                Console.WriteLine(ex);
+                ErrorMessage = ex.Message;
             }
         }
     }

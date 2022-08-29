@@ -9,7 +9,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "NRMData", "NRMData\NRMData.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRMDesktopUI", "NRMDesktopUI\NRMDesktopUI.csproj", "{795C4F71-E1E8-4118-8020-D45AC118A28D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{C170ABE3-AAC8-4620-ACB3-5130863E5E9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRMDataManager.library", "NRMDataManager.library\NRMDataManager.library.csproj", "{767B71B5-AC40-49D6-8EBC-B14FC1C8C859}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +31,10 @@ Global
 		{795C4F71-E1E8-4118-8020-D45AC118A28D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{795C4F71-E1E8-4118-8020-D45AC118A28D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{795C4F71-E1E8-4118-8020-D45AC118A28D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{767B71B5-AC40-49D6-8EBC-B14FC1C8C859}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{767B71B5-AC40-49D6-8EBC-B14FC1C8C859}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{767B71B5-AC40-49D6-8EBC-B14FC1C8C859}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{767B71B5-AC40-49D6-8EBC-B14FC1C8C859}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

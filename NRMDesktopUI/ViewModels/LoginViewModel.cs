@@ -39,7 +39,6 @@ namespace NRMDesktopUI.ViewModels
             }
         }
 
-
         public bool IsErrorVisible
         {
             get 
@@ -68,8 +67,6 @@ namespace NRMDesktopUI.ViewModels
             }
         }
 
-
-
         public bool CanLogIn
         {
             get
@@ -82,6 +79,7 @@ namespace NRMDesktopUI.ViewModels
                 return output;
             }
         }
+
         public async Task LogIn()
         {
             try

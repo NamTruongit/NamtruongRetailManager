@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace NRMDesktopUI.ViewModels
 {
     public class LoginViewModel : Screen
@@ -86,6 +87,8 @@ namespace NRMDesktopUI.ViewModels
             {
                 ErrorMessage = "";
                 var result = await _apihelper.Authenticate(Username, Password);
+                //More informantion about user
+                await _apihelper.GetLoggedInUserInfo(result.Access_Token);
             }
             catch (Exception ex)
             {

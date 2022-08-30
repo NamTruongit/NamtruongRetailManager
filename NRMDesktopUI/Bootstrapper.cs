@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using NRMDesktopUI.Helpers;
+using NRMDesktopUI.library;
 using NRMDesktopUI.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace NRMDesktopUI
             _container
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<EventAggregator, EventAggregator>()
+                .Singleton<ILoggedInUserModel, LoggedInUserModel>()
                 .Singleton<IAPIHelpers, APIHelpers>();
 
             GetType().Assembly.GetTypes()

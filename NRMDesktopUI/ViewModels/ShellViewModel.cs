@@ -21,5 +21,6 @@ namespace NRMDesktopUI.ViewModels
             _loginVM = loginVM;
             ActivateItem(_loginVM);
         }
+
     }
 }

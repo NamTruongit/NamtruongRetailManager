@@ -68,6 +68,8 @@ namespace NRMDesktopUI.ViewModels
             }
         }
 
+
+
         public bool CanLogIn
         {
             get
@@ -95,5 +97,7 @@ namespace NRMDesktopUI.ViewModels
                 ErrorMessage = ex.Message;
             }
         }
+
+
     }
 }

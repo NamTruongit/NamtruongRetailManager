@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using NRMDesktopUI.EventModels;
 using NRMDesktopUI.Helpers;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,11 @@ namespace NRMDesktopUI.ViewModels
         private string _username;
         private string _password;
         private IAPIHelpers _apihelper;
-        public LoginViewModel(IAPIHelpers apihelper)
+        private IEventAggregator _event;
+        public LoginViewModel(IAPIHelpers apihelper, IEventAggregator events)
         {
             _apihelper = apihelper;
+            _event = events;
         }
         public string Username
         {
@@ -91,6 +94,8 @@ namespace NRMDesktopUI.ViewModels
                 var result = await _apihelper.Authenticate(Username, Password);
                 //More informantion about user
                 await _apihelper.GetLoggedInUserInfo(result.Access_Token);
+
+                _event.PublishOnUIThread(new LogOnEvent());
             }
             catch (Exception ex)
             {

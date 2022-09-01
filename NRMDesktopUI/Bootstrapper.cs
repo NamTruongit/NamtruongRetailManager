@@ -30,7 +30,7 @@ namespace NRMDesktopUI
 
             _container
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<EventAggregator, EventAggregator>()
+                .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<ILoggedInUserModel, LoggedInUserModel>()
                 .Singleton<IAPIHelpers, APIHelpers>();
 

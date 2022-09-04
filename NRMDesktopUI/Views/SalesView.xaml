@@ -67,7 +67,15 @@
 
         <StackPanel Grid.Row="1" Grid.Column="1" >
             <TextBlock >Items</TextBlock>
-            <ListView x:Name="Products" Width="150" Height="200" />
+            <ListBox x:Name="Product" Width="150" Height="200" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Productname}">
+
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </StackPanel>
 
 

@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using NRMDesktopUI.Helpers;
 using NRMDesktopUI.library;
+using NRMDesktopUI.library.API;
 using NRMDesktopUI.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,8 @@ namespace NRMDesktopUI
         }
         protected override void Configure()
         {
-            _container.Instance(_container);
+            _container.Instance(_container)
+                .PerRequest<IProductEndPoint,ProductEndPoint>();
 
             _container
                 .Singleton<IWindowManager, WindowManager>()

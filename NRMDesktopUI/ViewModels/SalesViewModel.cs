@@ -4,6 +4,7 @@ using NRMDesktopUI.library.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace NRMDesktopUI.ViewModels
             base.OnViewLoaded(view);
             await LoadProduct();
         }
-        public async Task LoadProduct()
+        private async Task LoadProduct()
         {
             var productList = await _productEndPoint.GetAll();
             Product = new BindingList<ProductModel>(productList);
@@ -43,24 +44,38 @@ namespace NRMDesktopUI.ViewModels
             }
         }
 
-        private BindingList<string> _cart;
+        private ProductModel _selectedProduct;
 
-        public BindingList<string> Cart
+        public ProductModel SelectedProduct
+        {
+            get { return _selectedProduct; }
+            set 
+            {
+                _selectedProduct = value;
+                 NotifyOfPropertyChange(()=>SelectedProduct);
+            }
+        }
+
+
+        private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
+
+        public BindingList<CartItemModel> Cart
         {
             get { return _cart; }
             set { _cart = value; }
         }
 
 
-        private string _itemQuantity;
+        private int _itemQuantity = 1;
 
-        public string ItemQuantity
+        public int ItemQuantity
         {
             get { return _itemQuantity; }
             set
             {
                 _itemQuantity = value;
                 NotifyOfPropertyChange(() => ItemQuantity);
+                NotifyOfPropertyChange(() => CanAddToCart);
             }
         }
 
@@ -70,7 +85,14 @@ namespace NRMDesktopUI.ViewModels
             get
             {
                 //Todo - replace it calculation
-                return "$0.00";
+                decimal subtotal = 0M;
+
+                foreach (var item in _cart)
+                {
+                    subtotal += (item.Product.RetailPrice * item.QuantityInCart);
+                }
+
+                return subtotal.ToString("C",CultureInfo.GetCultureInfo("en-us"));
             }
         }
         public string Tax
@@ -98,13 +120,37 @@ namespace NRMDesktopUI.ViewModels
             {
                 bool output = false;
                 //Make sure something is selected
+                if (ItemQuantity > 0&& SelectedProduct?.QuantityInStock >= ItemQuantity)
+                {
+                    output = true;
+                }
                 return output;
             }
         }
 
         public void AddToCart()
         {
-
+            CartItemModel exitingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
+            if (exitingItem != null)
+            {
+                exitingItem.QuantityInCart += ItemQuantity;
+                //// Hack - there should be better way of refreshing cart display
+                Cart.Remove(exitingItem);
+                Cart.Add(exitingItem);
+            }
+            else
+            {
+                CartItemModel item = new CartItemModel()
+                {
+                    Product = SelectedProduct,
+                    QuantityInCart = ItemQuantity,
+                };
+                Cart.Add(item);
+            }
+            
+            SelectedProduct.QuantityInStock -= ItemQuantity;
+            ItemQuantity = 1;
+            NotifyOfPropertyChange(()=>SubTotal);
         }
 
         public bool CanRemoveFromCart
@@ -119,7 +165,7 @@ namespace NRMDesktopUI.ViewModels
 
         public void RemoveFromCart()
         {
-
+            NotifyOfPropertyChange(() => SubTotal);
         }
 
         public bool CanCheckOut

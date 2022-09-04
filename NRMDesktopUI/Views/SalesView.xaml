@@ -67,7 +67,7 @@
 
         <StackPanel Grid.Row="1" Grid.Column="1" >
             <TextBlock >Items</TextBlock>
-            <ListBox x:Name="Product" Width="150" Height="200" >
+            <ListBox x:Name="Product" MinWidth="180" MaxHeight="200" Height="200" SelectedItem="{Binding SelectedProduct}" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Productname}">
@@ -86,20 +86,40 @@
                     Width="145"
                     Height="30"
                     Background="Transparent"
-                    Style="{StaticResource Button_Modify}"
+                  
                     Content="Add to cart"
-                    Margin="0 10"/>
+                    Margin="0 10">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
             <Button x:Name="RemoveFromCart"
                     Width="145"
                     Height="30"
                     Background="Transparent"
-                    Style="{StaticResource Button_Modify}"
-                    Content="Remove From Cart"/>
+        
+                    Content="Remove From Cart">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
         </StackPanel>
         
         <StackPanel Grid.Row="1" Grid.Column="3" >
             <TextBlock >Cart</TextBlock>
-            <ListView x:Name="Cart" Width="150" Height="200" />
+            <ListBox x:Name="Cart" MinWidth="180" MaxWidth="250" Height="200" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding DisplayText}">
+
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </StackPanel>
         
         <DockPanel Grid.Column="3" Grid.Row="3">
@@ -125,10 +145,13 @@
                     Width="145"
                     Height="30"
                     Background="Transparent"
-                    Style="{StaticResource Button_Modify}"
                     Content="Check Out"
                 Margin="0 5">
-            
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
         </Button>
 
 

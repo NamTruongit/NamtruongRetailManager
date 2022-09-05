@@ -70,9 +70,19 @@
             <ListBox x:Name="Product" MinWidth="180" MaxHeight="200" Height="200" SelectedItem="{Binding SelectedProduct}" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Productname}">
-
-                        </TextBlock>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Productname}"></TextBlock>
+                            <StackPanel  Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                                    <TextBlock Text="Price: " FontSize="14"/>
+                                    <TextBlock Text="{Binding RetailPrice,StringFormat='{}{0:C}'}" FontSize="14" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                                    <TextBlock Text="QTY: " FontSize="14"/>
+                                    <TextBlock Text="{Binding QuantityInStock}" FontSize="14"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

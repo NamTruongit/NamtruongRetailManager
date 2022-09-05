@@ -5,6 +5,8 @@
     [ProducID] INT NOT NULL, 
     [Quantity] INT NOT NULL DEFAULT 1,
     [PurchasePrice] MONEY NOT NULL, 
-    [Tax] MONEY NOT NULL
+    [Tax] MONEY NOT NULL, 
+    CONSTRAINT [FK_SaleDetail_ToProduct] FOREIGN KEY (ProducID) REFERENCES [Product](Id), 
+    CONSTRAINT [FK_SaleDetail_To] FOREIGN KEY (SaleID) REFERENCES [Sale](Id)
     
 )

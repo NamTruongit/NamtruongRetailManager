@@ -2,6 +2,7 @@
 using NRMDesktopUI.Helpers;
 using NRMDesktopUI.library;
 using NRMDesktopUI.library.API;
+using NRMDesktopUI.library.Helpers;
 using NRMDesktopUI.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace NRMDesktopUI
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<ILoggedInUserModel, LoggedInUserModel>()
+                .Singleton<IConfigHelper,ConfigHelper>()
                 .Singleton<IAPIHelpers, APIHelpers>();
 
             GetType().Assembly.GetTypes()

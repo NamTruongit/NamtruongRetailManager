@@ -31,7 +31,7 @@ namespace NRMDataManager.library.Internal.DataAccess
         public void SaveData<T>(string storeProcedure, T parameters, string connectionStringName)
         {
             string connectionString = GetConnecttionString(connectionStringName);
-            using (IDbConnection connection = new SqlConnection())
+            using (IDbConnection connection = new SqlConnection(connectionString))
             {
                 connection.Execute(storeProcedure, parameters,
                     commandType: CommandType.StoredProcedure);

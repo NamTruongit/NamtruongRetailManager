@@ -16,10 +16,12 @@ namespace NRMDesktopUI.ViewModels
     {
         IProductEndPoint _productEndPoint;
         IConfigHelper _configHelper;
-        public  SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper)
+        ISaleEndPoint _saleEndPoint; 
+        public  SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper,ISaleEndPoint saleEndPoint)
         {
             _productEndPoint = productEndPoint;
             _configHelper = configHelper;
+            _saleEndPoint = saleEndPoint;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -68,7 +70,7 @@ namespace NRMDesktopUI.ViewModels
         }
 
 
-        private int _itemQuantity = 1;
+        private int _itemQuantity ;
 
         public int ItemQuantity
         {
@@ -147,7 +149,7 @@ namespace NRMDesktopUI.ViewModels
             {
                 bool output = false;
                 //Make sure something is selected
-                if (ItemQuantity > 0&& SelectedProduct?.QuantityInStock >= ItemQuantity)
+                if (ItemQuantity > 0 && SelectedProduct?.QuantityInStock >= ItemQuantity)
                 {
                     output = true;
                 }
@@ -180,6 +182,7 @@ namespace NRMDesktopUI.ViewModels
             NotifyOfPropertyChange(()=>SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
 
         public bool CanRemoveFromCart
@@ -197,6 +200,7 @@ namespace NRMDesktopUI.ViewModels
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
 
         public bool CanCheckOut
@@ -204,14 +208,28 @@ namespace NRMDesktopUI.ViewModels
             get
             {
                 bool output = false;
-                //Make sure something is on the cart
+                //Make sure something is on the cart    
+                if (Cart.Count > 0)
+                {
+                    output = true;
+                }
                 return output;
             }
         }
 
-        public void Checkout()
+        public async Task CheckOut()
         {
-
+            // Create a saleModel and post to the API
+            SaleModel sale = new SaleModel();
+            foreach (var item in Cart)
+            {
+                sale.SaleDetails.Add(new SaleDetailModel
+                {
+                    ProducID = item.Product.Id,
+                    Quantity = item.QuantityInCart
+                });
+            }
+            await _saleEndPoint.PostSale(sale);
         }
 
     }

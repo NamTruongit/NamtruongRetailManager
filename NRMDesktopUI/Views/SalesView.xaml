@@ -151,7 +151,8 @@
             <TextBlock Text="Total:" />
             <TextBlock x:Name="Total" Text="$0.00" TextAlignment="Right"/>
         </DockPanel>
-        <Button Grid.Column="3" Grid.Row="6" x:Name="CheckOut"
+        <Button Grid.Column="3" Grid.Row="6" 
+                x:Name="CheckOut"
                     Width="145"
                     Height="30"
                     Background="Transparent"

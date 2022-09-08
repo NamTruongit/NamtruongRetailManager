@@ -1,5 +1,5 @@
 ﻿using NRMDataManager.library.Internal.DataAccess;
-using NRMDataManager.library.Internal.Models;
+using NRMDataManager.library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

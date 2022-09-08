@@ -3,6 +3,7 @@ using NRMDesktopUI.EventModels;
 using NRMDesktopUI.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,8 @@ namespace NRMDesktopUI.ViewModels
 {
     public class LoginViewModel : Screen
     {
-        private string _username;
-        private string _password;
+        private string _username = ConfigurationManager.AppSettings["User"];
+        private string _password = ConfigurationManager.AppSettings["Password"];
         private IAPIHelpers _apihelper;
         private IEventAggregator _event;
         public LoginViewModel(IAPIHelpers apihelper, IEventAggregator events)

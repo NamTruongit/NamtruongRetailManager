@@ -121,7 +121,7 @@
         
         <StackPanel Grid.Row="1" Grid.Column="3" >
             <TextBlock >Cart</TextBlock>
-            <ListBox x:Name="Cart" MinWidth="180" MaxWidth="400" Height="200" >
+            <ListBox x:Name="Cart" MinWidth="180" MaxWidth="400" Height="200" SelectedItem="{Binding SelectedCartItem}" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding DisplayText , UpdateSourceTrigger=PropertyChanged}" >

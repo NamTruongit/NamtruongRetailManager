@@ -1,8 +1,11 @@
-﻿using Caliburn.Micro;
+﻿using AutoMapper;
+using Caliburn.Micro;
 using NRMDesktopUI.Helpers;
 using NRMDesktopUI.library;
 using NRMDesktopUI.library.API;
 using NRMDesktopUI.library.Helpers;
+using NRMDesktopUI.library.Models;
+using NRMDesktopUI.Models;
 using NRMDesktopUI.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -26,8 +29,26 @@ namespace NRMDesktopUI
             "Password",
             "PasswordChanged");
         }
+
+        private IMapper ConfigureAutoMapper()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ProductModel, ProducDisplayModel>();
+                cfg.CreateMap<CartItemModel, CartItemDisplayModel>();
+            });
+
+            var Outputter = config.CreateMapper();
+
+            return Outputter;
+        }
+
         protected override void Configure()
         {
+            
+
+            _container.Instance(ConfigureAutoMapper()); 
+
             _container.Instance(_container)
                 .PerRequest<IProductEndPoint, ProductEndPoint>()
                 .PerRequest<ISaleEndPoint, SaleEndPoint>();

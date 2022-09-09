@@ -8,7 +8,7 @@
  
             Background="White"
             FontSize="18"
-            Width="700" Height="400">
+            Width="900" Height="400">
 
     <UserControl.Resources>
         <Style x:Key="Button_Modify" TargetType="Button">
@@ -79,7 +79,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
                                     <TextBlock Text="QTY: " FontSize="14"/>
-                                    <TextBlock Text="{Binding QuantityInStock}" FontSize="14"/>
+                                    <TextBlock Text="{Binding QuantityInStock, UpdateSourceTrigger=PropertyChanged}" FontSize="14"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -121,10 +121,10 @@
         
         <StackPanel Grid.Row="1" Grid.Column="3" >
             <TextBlock >Cart</TextBlock>
-            <ListBox x:Name="Cart" MinWidth="180" MaxWidth="250" Height="200" >
+            <ListBox x:Name="Cart" MinWidth="180" MaxWidth="400" Height="200" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding DisplayText}">
+                        <TextBlock Text="{Binding DisplayText , UpdateSourceTrigger=PropertyChanged}" >
 
                         </TextBlock>
                     </DataTemplate>

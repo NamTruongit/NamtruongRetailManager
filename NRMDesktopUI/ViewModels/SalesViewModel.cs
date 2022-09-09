@@ -1,7 +1,9 @@
-﻿using Caliburn.Micro;
+﻿using AutoMapper;
+using Caliburn.Micro;
 using NRMDesktopUI.library.API;
 using NRMDesktopUI.library.Helpers;
 using NRMDesktopUI.library.Models;
+using NRMDesktopUI.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,12 +18,14 @@ namespace NRMDesktopUI.ViewModels
     {
         IProductEndPoint _productEndPoint;
         IConfigHelper _configHelper;
-        ISaleEndPoint _saleEndPoint; 
-        public  SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper,ISaleEndPoint saleEndPoint)
+        ISaleEndPoint _saleEndPoint;
+        IMapper _mapper;
+        public  SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper,ISaleEndPoint saleEndPoint,IMapper mapper)
         {
             _productEndPoint = productEndPoint;
             _configHelper = configHelper;
             _saleEndPoint = saleEndPoint;
+            _mapper = mapper;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -32,13 +36,14 @@ namespace NRMDesktopUI.ViewModels
         private async Task LoadProduct()
         {
             var productList = await _productEndPoint.GetAll();
-            Product = new BindingList<ProductModel>(productList);
+            var products = _mapper.Map<List<ProducDisplayModel>>(productList);
+            Product = new BindingList<ProducDisplayModel>(products);
         }
 
-        private BindingList<ProductModel> _product;
+        private BindingList<ProducDisplayModel> _product;
 
 
-        public BindingList<ProductModel> Product
+        public BindingList<ProducDisplayModel> Product
         {
             get { return _product; }
             set
@@ -48,9 +53,9 @@ namespace NRMDesktopUI.ViewModels
             }
         }
 
-        private ProductModel _selectedProduct;
+        private ProducDisplayModel _selectedProduct;
 
-        public ProductModel SelectedProduct
+        public ProducDisplayModel SelectedProduct
         {
             get { return _selectedProduct; }
             set 
@@ -61,16 +66,16 @@ namespace NRMDesktopUI.ViewModels
         }
 
 
-        private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
+        private BindingList<CartItemDisplayModel> _cart = new BindingList<CartItemDisplayModel>();
 
-        public BindingList<CartItemModel> Cart
+        public BindingList<CartItemDisplayModel> Cart
         {
             get { return _cart; }
             set { _cart = value; }
         }
 
 
-        private int _itemQuantity ;
+        private int _itemQuantity = 1 ;
 
         public int ItemQuantity
         {
@@ -159,17 +164,15 @@ namespace NRMDesktopUI.ViewModels
 
         public void AddToCart()
         {
-            CartItemModel exitingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
+            CartItemDisplayModel exitingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
             if (exitingItem != null)
             {
                 exitingItem.QuantityInCart += ItemQuantity;
-                //// Hack - there should be better way of refreshing cart display
-                Cart.Remove(exitingItem);
-                Cart.Add(exitingItem);
+
             }
             else
             {
-                CartItemModel item = new CartItemModel()
+                CartItemDisplayModel item = new CartItemDisplayModel
                 {
                     Product = SelectedProduct,
                     QuantityInCart = ItemQuantity,
@@ -178,7 +181,7 @@ namespace NRMDesktopUI.ViewModels
             }
             
             SelectedProduct.QuantityInStock -= ItemQuantity;
-            ItemQuantity = 1;
+            ItemQuantity = 1;   
             NotifyOfPropertyChange(()=>SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);

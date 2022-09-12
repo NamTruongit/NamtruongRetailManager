@@ -14,6 +14,7 @@ namespace NRMDataManager.Controllers
    [Authorize]
     public class SaleController : ApiController
     {
+        [Authorize(Roles = "Cashier")]
         public void Post(SaleModel sale)
         {
             SaleData data = new SaleData();
@@ -21,6 +22,7 @@ namespace NRMDataManager.Controllers
             data.SaveSale(sale, userId);
             Console.WriteLine();
         }
+        [Authorize(Roles = "Admin,Manager")]
         [Route("GetSaleReport")]
         public List<SaleReportModel> GetSaleReport()
         {

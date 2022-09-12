@@ -53,19 +53,29 @@ namespace NRMDataManager.library.DataAccess
             sale.Total = sale.SubTotal * sale.Tax;
 
             //save the sale model
-
-            SqlDataAccess sql = new SqlDataAccess();
-            sql.SaveData<SaleDBModel>("dbo.spSale_Insert", sale, "NRMData");
-
-            sale.Id = sql.LoadData<int, dynamic>("spSaleLookUp", new { sale.CashierID, sale.SaleDate }, "NRMData").FirstOrDefault();
-            // get the id from the sale table
-            //finish filling in the sale deteil model
-
-            foreach (var item in details)
+            using (SqlDataAccess sql = new SqlDataAccess())
             {
-                item.SaleID = sale.Id;
-                //save the sale detail model 
-                sql.SaveData("dbo.SaleDetail_Insert", item, "NRMData");
+                try
+                {
+                    sql.StartTransaction("NRMData");
+                    sql.SaveDataInTransaction<SaleDBModel>("dbo.spSale_Insert", sale);
+                    sale.Id = sql.LoadDataInTransaction<int, dynamic>("spSaleLookUp", new { sale.CashierID, sale.SaleDate }).FirstOrDefault();
+
+                    // get the id from the sale table
+                    //finish filling in the sale deteil model
+
+                    foreach (var item in details)
+                    {
+                        item.SaleID = sale.Id;
+                        //save the sale detail model 
+                        sql.SaveDataInTransaction("dbo.SaleDetail_Insert", item);
+                    }
+                }
+                catch 
+                {
+                    sql.RollbackTransaction();
+                    throw;
+                }
             }
         }
     }

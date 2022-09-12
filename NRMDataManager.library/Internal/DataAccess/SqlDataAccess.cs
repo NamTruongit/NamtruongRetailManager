@@ -46,18 +46,18 @@ namespace NRMDataManager.library.Internal.DataAccess
         //dispose
         private IDbConnection _connection;
         private IDbTransaction _transaction;
+
+        private bool IsClosed = false;
         public List<T> LoadDataInTransaction<T, U>(string storeProcedure, U parameters)
         {
             
                 List<T> rows = _connection.Query<T>(storeProcedure, parameters,
                     commandType: CommandType.StoredProcedure,transaction: _transaction).ToList();
                 return rows;
-          
         }
 
         public void SaveDataInTransaction<T>(string storeProcedure, T parameters)
         {
-          
                 _connection.Execute(storeProcedure, parameters,
                     commandType: CommandType.StoredProcedure,transaction: _transaction);
         }
@@ -67,21 +67,36 @@ namespace NRMDataManager.library.Internal.DataAccess
             _connection = new SqlConnection(connectionString);
             _connection.Open();
             _transaction = _connection.BeginTransaction();
+            IsClosed = false;
         }
         public void CommitTransaction()
         {
             _transaction?.Commit();
             _connection.Close();
+            IsClosed = true;
         }
         public void RollbackTransaction()
         {
             _transaction.Rollback();
             _connection.Close();
+            IsClosed = true;
         }
 
         public void Dispose()
         {
-            CommitTransaction();
+            if (IsClosed == false)
+            {
+                try
+                {
+                    CommitTransaction();
+                }
+                catch
+                {                }
+               
+            }
+            _transaction = null;
+            _connection = null;
+
         }
     }
 }

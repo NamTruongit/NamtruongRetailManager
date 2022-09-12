@@ -70,6 +70,7 @@ namespace NRMDataManager.library.DataAccess
                         //save the sale detail model 
                         sql.SaveDataInTransaction("dbo.SaleDetail_Insert", item);
                     }
+                    sql.CommitTransaction();
                 }
                 catch 
                 {

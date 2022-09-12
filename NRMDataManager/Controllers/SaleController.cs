@@ -11,7 +11,7 @@ using System.Web.Http;
 
 namespace NRMDataManager.Controllers
 {
-    [Authorize]
+   [Authorize]
     public class SaleController : ApiController
     {
         public void Post(SaleModel sale)
@@ -21,5 +21,12 @@ namespace NRMDataManager.Controllers
             data.SaveSale(sale, userId);
             Console.WriteLine();
         }
+        [Route("GetSaleReport")]
+        public List<SaleReportModel> GetSaleReport()
+        {
+            SaleData data = new SaleData();
+            return data.GetSaleReport();
+        }
     }
+
 }

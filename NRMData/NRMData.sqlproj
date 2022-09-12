@@ -74,6 +74,9 @@
     <Build Include="dbo\Store Procedures\spSale_Insert.sql" />
     <Build Include="dbo\Store Procedures\SaleDetail_Insert.sql" />
     <Build Include="dbo\Store Procedures\spSaleLookUp.sql" />
+    <Build Include="dbo\Store Procedures\spInventory_GetAll.sql" />
+    <Build Include="dbo\Store Procedures\spInventory_Insert.sql" />
+    <Build Include="dbo\Store Procedures\spSale_SaleReport.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishLocations\NRMData.publish.xml" />

@@ -10,6 +10,6 @@ namespace NRMDesktopUI.library
          string LastName { get; set; }
          string EmailAddress { get; set; }
          DateTime CreateDate { get; set; }
-        void LoggOffUser();
+        void ResetUsetModel();
     }
 }

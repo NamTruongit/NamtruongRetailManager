@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using NRMDesktopUI.EventModels;
+using NRMDesktopUI.Helpers;
 using NRMDesktopUI.library;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,17 @@ namespace NRMDesktopUI.ViewModels
         private IEventAggregator _events;
         private SalesViewModel _salesVM;
         private ILoggedInUserModel _user;
+        IAPIHelpers _apiHelper;
 
 
-        public ShellViewModel(IEventAggregator events,SalesViewModel saleVM, ILoggedInUserModel user)
+        public ShellViewModel(IEventAggregator events,SalesViewModel saleVM, ILoggedInUserModel user, IAPIHelpers apiHelper)
         {
 
             _events = events;
             _salesVM = saleVM;
             _events.Subscribe(this);
             _user = user;
+            _apiHelper = apiHelper;
             ActivateItem(IoC.Get<LoginViewModel>());
         }
 
@@ -46,7 +49,8 @@ namespace NRMDesktopUI.ViewModels
 
         public void LogOut()
         {
-            _user.LoggOffUser();
+            _user.ResetUsetModel();
+            _apiHelper.LogOffUser();
             ActivateItem(IoC.Get<LoginViewModel>());
             NotifyOfPropertyChange(() => IsAccountVisible);
 

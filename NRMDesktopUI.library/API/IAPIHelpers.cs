@@ -9,6 +9,7 @@ namespace NRMDesktopUI.Helpers
         HttpClient ApiClient { get; }
         Task<Authenticateduser> Authenticate(string username, string password);
 
+        void LogOffUser();
         Task GetLoggedInUserInfo(string token);
     }
 }

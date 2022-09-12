@@ -15,7 +15,7 @@ namespace NRMDesktopUI.library
         public string EmailAddress { get; set; }
         public DateTime CreateDate { get; set; }
 
-        public void LoggOffUser()
+        public void ResetUsetModel()
         {
             Token = "";
             Id = "";

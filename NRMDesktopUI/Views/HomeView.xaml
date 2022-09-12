@@ -231,27 +231,27 @@
 
                     <!--Menu-->
                     <Menu Height="30"
-            Width="738"
-            Background="Transparent"
-            BorderBrush="Transparent"
-            VerticalAlignment="Top"
-            HorizontalAlignment="Center"
+                        Width="738"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Center"
                      
-            Margin="0,5,0,0" Grid.RowSpan="2">
-                        <MenuItem Header="Home"
-                    Height="30"
-                    Width="98"
-                    Style="{StaticResource Main_MenuItem}">
+                        Margin="0,5,0,0" Grid.RowSpan="2">
+                         <MenuItem Header="Home"
+                                Height="30"
+                                Width="98"
+                                Style="{StaticResource Main_MenuItem}"> 
                             <MenuItem.Icon>
                                 <Image Source="/Assets/icon_home2.png" />
 
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="ACCOUNT"
-                    Height="30" 
-                    Width="110"
-                    x:Name="LoginScreen"
-                    Style="{StaticResource Main_MenuItem}">
+                                    Height="30" 
+                                    Width="110"
+                                    x:Name="LoginScreen"
+                                    Style="{StaticResource Main_MenuItem}"> 
                             <MenuItem.Icon>
                                 <Image Source="/Assets/icon_uer.png" />
 
@@ -259,22 +259,22 @@
                         </MenuItem>
 
                         <!--Service-->
-                        <MenuItem Header="SERVICES"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                    Style="{StaticResource Service_Menu_Item_With_DropDown}">
-                            <MenuItem.Icon>
+                         <MenuItem Header="SERVICES"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                            Style="{StaticResource Service_Menu_Item_With_DropDown}">
+                         <MenuItem.Icon>
                                 <Image Source="/Assets/icon_service2.png"
-                        Stretch="Uniform"/>
+                                         Stretch="Uniform"/>
                             </MenuItem.Icon>
                             <MenuItem Header="Web design"
-                        SelectiveScrollingGrid.SelectiveScrollingOrientation="None"
-                        Height="18"
-                        Width="300"
-                        Style="{StaticResource Service_Sub_Menu_Item}">
-                                <MenuItem.Icon>
+                                    SelectiveScrollingGrid.SelectiveScrollingOrientation="None"
+                                    Height="18"
+                                    Width="300"
+                                    Style="{StaticResource Service_Sub_Menu_Item}">
+                                            <MenuItem.Icon>
                                     <Image Source="/Assets/icon_web.png"
-                            Stretch="Uniform"/>
+                                    Stretch="Uniform"/>
 
                                 </MenuItem.Icon>
                             </MenuItem>

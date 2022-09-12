@@ -8,5 +8,9 @@ namespace NRMDesktopUI.ViewModels
 {
     public class HomeViewModel
     {
+        public string show()
+        {
+            return "this i a note";
+        }
     }
 }

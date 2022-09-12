@@ -14,5 +14,15 @@ namespace NRMDesktopUI.library
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
         public DateTime CreateDate { get; set; }
+
+        public void LoggOffUser()
+        {
+            Token = "";
+            Id = "";
+            FirstsName = "";
+            LastName = "";
+            EmailAddress = "";
+            CreateDate = DateTime.MinValue;
+        }
     }
 }

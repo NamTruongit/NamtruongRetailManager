@@ -65,7 +65,6 @@ namespace NRMDesktopUI.Helpers
             _apiClient.DefaultRequestHeaders.Accept.Clear();
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-
             using (HttpResponseMessage reponse = await _apiClient.GetAsync("/api/User"))
             {
                 if (reponse.IsSuccessStatusCode)
@@ -76,7 +75,8 @@ namespace NRMDesktopUI.Helpers
                     _loggedInUser.FirstsName = result.FirstsName;
                     _loggedInUser.Id = result.Id;
                     _loggedInUser.LastName = result.LastName;
-                    _loggedInUser.Token = result.Token;
+                    _loggedInUser.Token = token;
+
                 }
                 else
                 {

@@ -3,8 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:NRMDesktopUI.Views"
-    mc:Ignorable="d"
+    xmlns:local="clr-namespace:NRMDesktopUI.Views" xmlns:viewmodels="clr-namespace:NRMDesktopUI.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:ShellViewModel}"
+        mc:Ignorable="d"
     WindowStyle="None"
     FontSize="24"
     AllowsTransparency="True"
@@ -14,6 +14,143 @@
     Title="ShellView" Height="500" Width="1000">
 
     <Window.Resources>
+        <Style x:Key="Service_Menu_Item_With_DropDown"
+                TargetType="MenuItem">
+       
+                <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type MenuItem}">
+                        <Border x:Name="border"
+                                Background="Transparent" 
+                                BorderThickness="0"
+                                CornerRadius="6 6 0 0"
+                                Height="30"
+                                Width="145">
+                            <Grid>
+                                <!--Icon-->
+                                <ContentPresenter ContentSource="Icon"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Height="22"
+                                        Width="22"
+                                        Margin="10,3,0,0"/>
+                                <!--Text-->
+                                <ContentPresenter ContentSource="Header"
+                                        TextBlock.FontFamily="Rubik Medium"
+                                        TextBlock.FontSize="15"
+                                        TextBlock.Foreground="Black"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"
+                                        Margin="40,0,0,0"/>
+                                <!--icon dropdown-->
+                                <Image Source="/Assets/icon_dropdown4 (1).png" 
+
+                                        Stretch="None"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Width="200"
+                                        Height="200"
+                                        Margin="0,0,0,0"/>
+
+                                <!--Popup-->
+                                <Popup x:Name="PART_Popup"
+                                        AllowsTransparency="True"
+                                        IsOpen="{Binding IsSubmenuOpen,RelativeSource={RelativeSource TemplatedParent}}"
+                                        Placement="Bottom"
+                                        PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}">
+
+                                    <Border x:Name="SubMenuBorder"
+                                            Background="#73C269"
+                                            BorderBrush="#73C269">
+                                        <ScrollViewer x:Name="SubMenuScrollViewer"
+                                                Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollviewer,TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                            <Grid RenderOptions.ClearTypeHint="Enabled">
+                                                <Canvas HorizontalAlignment="Left"
+                                                        VerticalAlignment="Top"/>
+                                                <ItemsPresenter x:Name="ItemsPresenter"/>
+                                            </Grid>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSuspendingPopupAnimation"
+                                        Value="True">
+                                <Setter Property="PopupAnimation"
+                                        TargetName="PART_Popup"
+                                        Value="None"/>
+                            </Trigger>
+                            <Trigger Property="IsHighlighted"
+                                        Value="True">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="#73C269"/>
+
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="#73C269"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+        <!--submenu of service-->
+        <Style x:Key="Service_Sub_Menu_Item" TargetType="MenuItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type MenuItem}">
+                        <Border x:Name="border"
+                                 Background="Transparent"
+                                 BorderThickness="0">
+                            <Grid>
+
+                                <!-- Icon-->
+                                <ContentPresenter ContentSource="Icon"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Height="18"
+                                        Width="18"
+                                        Margin="10,0,0,0"/>
+                                <!--Text-->
+                                <ContentPresenter ContentSource="Header"
+                                        TextBlock.Foreground="Black"
+                                        TextBlock.FontSize="15"
+                                        TextBlock.FontFamily="Rubik Medium"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Margin="35,0,0,0"/>
+                                <Grid x:Name="highlighter"
+                                        Height="35"
+                                        Width="2"
+                                        Background="White"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Visibility="Collapsed"/>
+                                </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="#F0EB36">
+                                </Setter>
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="#F0EB36">
+                                </Setter>
+                                <Setter Property="Visibility"
+                                        TargetName="highlighter"
+                                        Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="Main_MenuItem" TargetType="MenuItem">
             <Setter Property="Template">
                 <Setter.Value>
@@ -59,6 +196,7 @@
             </Setter>
         </Style>
     </Window.Resources>
+    
     <Border CornerRadius="5"
             Background="White">
         <DockPanel Margin=" 8" >
@@ -70,31 +208,60 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                <Menu 
-                  FontSize="20"
-                  Background="Transparent">
+                <Menu FontSize="20" Background="Transparent">
                     <MenuItem Header="File"
-                          Width="100"
-                          Background="Transparent"
-                          Style="{StaticResource Main_MenuItem }">
+                              Width="150"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                              Background="Transparent"
+                              Style="{StaticResource Service_Menu_Item_With_DropDown }">
                         <MenuItem.Icon>
                             <Image Source="/Assets/icons8-file-30.png" />
                         </MenuItem.Icon>
+                        <MenuItem x:Name="ExitApplication"
+                                  Header="Log out"
+                                  Width="200"
+                                  Height="30"
+                                  SelectiveScrollingGrid.SelectiveScrollingOrientation="None"
+                                  Style="{StaticResource Service_Sub_Menu_Item}">
+                            <MenuItem.Icon>
+                                <Image Source="/Assets/icon_web.png"
+                                    Stretch="Uniform"/>
+
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        
                     </MenuItem>
-                    <MenuItem Header="Login"
-                          Width="100"
-                          Background="Transparent"
-                          Style="{StaticResource Main_MenuItem }">
+
+
+                    <MenuItem Header="Account"
+                              Width="200"
+                              Visibility="{Binding IsAccountVisible,Converter={StaticResource BooleanToVisibilityConverter},FallbackValue=Collased}"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                              Style="{StaticResource Service_Menu_Item_With_DropDown}">
                         <MenuItem.Icon>
                             <Image Source="/Assets/icon_user3.png" />
                         </MenuItem.Icon>
+
+                        <MenuItem x:Name="LogOut"
+                                  Header="Log out"
+                                  Width="200"
+                                  Height="30"
+                                  SelectiveScrollingGrid.SelectiveScrollingOrientation="None"
+                                  Style="{StaticResource Service_Sub_Menu_Item}">
+                            <MenuItem.Icon>
+                                <Image Source="/Assets/icon_web.png"
+                                    Stretch="Uniform"/>
+
+                            </MenuItem.Icon>
+                        </MenuItem>
+
                     </MenuItem>
-                    
                 </Menu>
-                <Menu 
-                  FontSize="20"
-                  Background="Transparent"
-                     Grid.Column="2">
+                <Menu FontSize="20"
+                      Background="Transparent"
+                      Grid.Column="2">
                     <MenuItem Header="Quit"
                           Style="{StaticResource Main_MenuItem}"
                           Width="100"

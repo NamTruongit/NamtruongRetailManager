@@ -7,10 +7,12 @@ using NRMDesktopUI.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace NRMDesktopUI.ViewModels
 {
@@ -20,18 +22,48 @@ namespace NRMDesktopUI.ViewModels
         IConfigHelper _configHelper;
         ISaleEndPoint _saleEndPoint;
         IMapper _mapper;
-        public  SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper,ISaleEndPoint saleEndPoint,IMapper mapper)
+        private readonly StatusInfoViewModel _status;
+        private readonly IWindowManager _windown;
+
+        public  SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper,ISaleEndPoint saleEndPoint,IMapper mapper,StatusInfoViewModel status,IWindowManager windown)
         {
             _productEndPoint = productEndPoint;
             _configHelper = configHelper;
             _saleEndPoint = saleEndPoint;
             _mapper = mapper;
+            _status = status;
+            _windown = windown;
         }
 
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            await LoadProduct();
+            try
+            {
+                await LoadProduct();
+            }
+            catch (Exception ex)
+            {
+                dynamic setting = new ExpandoObject();
+                setting.WindowStartUpLocation = WindowStartupLocation.CenterOwner;
+                setting.ReSizeMode = ResizeMode.NoResize;
+                setting.Title = "System Error";
+
+                if (ex.Message == "Unauthorized")
+                {
+                    _status.UpdateMessage("Unauthorized Access", "You do not have permission to interact with the sale Form.");
+                    _windown.ShowDialog(_status, null, setting);
+                }
+                else
+                {
+                    _status.UpdateMessage("Fatal Exception", ex.Message);
+                    _windown.ShowDialog(_status, null, setting);
+                }
+
+
+
+                TryClose();
+            }
         }
 
         private async Task ResetSaleViewModel()

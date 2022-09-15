@@ -31,6 +31,83 @@ namespace NRMDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => Users);
             }
         }
+
+        private UserModel _SelectedUser;
+
+        public UserModel SelectedUser
+        {
+            get { return _SelectedUser; }
+            set 
+            { 
+                _SelectedUser = value;
+                SelectedUserName = value.Email;
+                UserRole = new BindingList<string>(value.Roles.Select(x => x.Value).ToList());
+                Loadroles();
+                NotifyOfPropertyChange(() => SelectedUser);
+            }
+        }
+
+        private string _selectedUserName;
+
+        public string SelectedUserName
+        {
+            get { return _selectedUserName; }
+            set 
+            { 
+                _selectedUserName = value;
+                NotifyOfPropertyChange(() => SelectedUserName);
+            }
+        }
+
+        private BindingList<string> _userRole = new BindingList<string>();
+
+        public BindingList<string> UserRole
+        {
+            get { return _userRole; }
+            set 
+            { 
+                _userRole = value;
+                NotifyOfPropertyChange(() => UserRole);
+            }
+        }
+
+        private BindingList<string> _availableRole = new BindingList<string>();
+
+        public BindingList<string> AvailableRole
+        {
+            get { return _availableRole; }
+            set
+            {
+                _availableRole = value;
+                NotifyOfPropertyChange(() => AvailableRole);
+            }
+        }
+
+        private string _selectedAvailableRole;
+
+        public string SelectedAvailableRole
+        {
+            get { return _selectedAvailableRole; }
+            set
+            {
+                _selectedAvailableRole = value;
+                NotifyOfPropertyChange(() => SelectedAvailableRole);
+            }
+        }
+
+        private string _selectedUserRole;
+
+        public string SelectedUserRole
+        {
+            get { return _selectedUserRole; }
+            set
+            { 
+                _selectedUserRole = value;
+                NotifyOfPropertyChange(() => SelectedUserRole); 
+            }
+        }
+
+
         public UserDisplayViewModel(StatusInfoViewModel status,IWindowManager window,IUserEndPoint userEndPoint)
         {
             _status = status;
@@ -72,5 +149,32 @@ namespace NRMDesktopUI.ViewModels
             Users = new BindingList<UserModel>(userList);
         }
 
+        private async Task Loadroles()
+        {
+            var roles = await _userEndPoint.GetAllRolls();
+            foreach (var role in roles)
+            {
+                if (UserRole.IndexOf(role.Value) < 0)
+                {
+                    AvailableRole.Add(role.Value);
+                }
+            }
+        }
+
+        public async void AddSelectedRole()
+        {
+            await _userEndPoint.AddUserToRole(SelectedUser.Id, SelectedAvailableRole);
+            
+            UserRole.Add(SelectedAvailableRole);
+            AvailableRole.Remove(SelectedAvailableRole);
+        }
+        public async void RemoveSelectedRole()
+        {
+            await _userEndPoint.RemoveUserFromRole(SelectedUser.Id, SelectedUserRole);
+
+            AvailableRole.Add(SelectedUserRole);
+            UserRole.Remove(SelectedUserRole);
+            
+        }
     }
 }

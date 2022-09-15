@@ -34,6 +34,49 @@ namespace NRMDesktopUI.library.API
             }
         }
 
+        public async Task<Dictionary<string,string>> GetAllRolls()
+        {
+            using (HttpResponseMessage reponse = await _apiHelper.ApiClient.GetAsync("/api/User/Admin/GetAllRoles"))
+            {
+                if (reponse.IsSuccessStatusCode)
+                {
+                    var result = await reponse.Content.ReadAsAsync<Dictionary<string, string>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(reponse.ReasonPhrase);
+                }
+
+            }
+        }
+
+        public async Task AddUserToRole(string userId,string roleName)
+        {
+            var data = new { userId, roleName };
+            using (HttpResponseMessage reponse = await _apiHelper.ApiClient.PostAsJsonAsync("/api/User/Admin/AddRoles",data))
+            {
+                if (reponse.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(reponse.ReasonPhrase);
+                }
+
+            }
+        }
+
+        public async Task RemoveUserFromRole(string userId, string roleName)
+        {
+            var data = new { userId, roleName };
+            using (HttpResponseMessage reponse = await _apiHelper.ApiClient.PostAsJsonAsync("/api/User/Admin/RemoveRoles", data))
+            {
+                if (reponse.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(reponse.ReasonPhrase);
+                }
+
+            }
+        }
+
     }
 }
 

@@ -1,7 +1,9 @@
-﻿using NRMDataManager.library.Internal.DataAccess;
+﻿using Microsoft.Extensions.Configuration;
+using NRMDataManager.library.Internal.DataAccess;
 using NRMDataManager.library.Models;
 using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +12,15 @@ namespace NRMDataManager.library.DataAccess
 {
     public class ProductData
     {
+        private readonly IConfiguration _config;
+
+        public ProductData(IConfiguration config)
+        {
+            _config = config;
+        }
         public List<ProductModel> GetProduct()
         {
-            SqlDataAccess sql = new SqlDataAccess();
+            SqlDataAccess sql = new SqlDataAccess(_config);
             var output = sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetAll", new { }, "NRMData");
             return output;
 
@@ -20,7 +28,7 @@ namespace NRMDataManager.library.DataAccess
 
         public ProductModel GetProductByID(int productId)
         {
-            SqlDataAccess sql = new SqlDataAccess();
+            SqlDataAccess sql = new SqlDataAccess(_config);
             var output = sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetById", new {Id = productId }, "NRMData").FirstOrDefault();
             return output;
         }

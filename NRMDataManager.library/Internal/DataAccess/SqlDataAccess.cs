@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -12,9 +13,15 @@ namespace NRMDataManager.library.Internal.DataAccess
 {
     internal class SqlDataAccess :IDisposable
     {
+        private readonly IConfiguration _config;
+        public SqlDataAccess(IConfiguration config)
+        {
+            _config = config;
+        }
         public string GetConnecttionString(string name)
         {
-            return ConfigurationManager.ConnectionStrings[name].ConnectionString;
+
+            return _config.GetConnectionString(name);
         }
 
         public List<T> LoadData<T, U>(string storeProcedure, U parameters, string connectionStringName)
@@ -48,6 +55,8 @@ namespace NRMDataManager.library.Internal.DataAccess
         private IDbTransaction _transaction;
 
         private bool IsClosed = false;
+        
+
         public List<T> LoadDataInTransaction<T, U>(string storeProcedure, U parameters)
         {
             

@@ -131,15 +131,15 @@ namespace NRMDesktopUI.ViewModels
                 if (ex.Message == "Unauthorized")
                 {
                     _status.UpdateMessage("Unauthorized Access", "You do not have permission to interact with the sale Form.");
-                    _window.ShowDialog(_status, null, setting);
+                    await _window.ShowDialogAsync(_status, null, setting);
                 }
                 else
                 {
                     _status.UpdateMessage("Fatal Exception", ex.Message);
-                    _window.ShowDialog(_status, null, setting);
+                     await _window.ShowDialogAsync(_status, null, setting);
                 }
 
-                TryClose();
+                TryCloseAsync();
             }
         }
 

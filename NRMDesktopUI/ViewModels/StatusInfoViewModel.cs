@@ -20,7 +20,7 @@ namespace NRMDesktopUI.ViewModels
         }
         public void Close()
         {
-            TryClose();
+            TryCloseAsync();
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -96,7 +97,7 @@ namespace NRMDesktopUI.ViewModels
                 //More informantion about user
                 await _apihelper.GetLoggedInUserInfo(result.Access_Token);
 
-                _event.PublishOnUIThread(new LogOnEvent());
+                await _event.PublishOnUIThreadAsync(new LogOnEvent(),new CancellationToken());
             }
             catch (Exception ex)
             {

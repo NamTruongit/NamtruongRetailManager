@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NRMDesktopUI.ViewModels
@@ -23,15 +24,15 @@ namespace NRMDesktopUI.ViewModels
 
             _events = events;
             _salesVM = saleVM;
-            _events.Subscribe(this);
+            _events.SubscribeOnPublishedThread(this);
             _user = user;
             _apiHelper = apiHelper;
-            ActivateItem(IoC.Get<LoginViewModel>());
+             ActivateItemAsync(IoC.Get<LoginViewModel>(),new CancellationToken());
         }
 
         public void ExitApplication()
         {
-            TryClose();
+            TryCloseAsync();
         }
 
         public bool IsAccountVisible
@@ -47,23 +48,29 @@ namespace NRMDesktopUI.ViewModels
             }
         }
 
-        public void UserManagement()
+        public async Task UserManagement()
         {
-            ActivateItem(IoC.Get<UserDisplayViewModel>());
+            await ActivateItemAsync(IoC.Get<UserDisplayViewModel>());
         }
 
-        public void LogOut()
+        public async Task LogOut()
         {
             _user.ResetUsetModel();
             _apiHelper.LogOffUser();
-            ActivateItem(IoC.Get<LoginViewModel>());
+            await ActivateItemAsync(IoC.Get<LoginViewModel>());
             NotifyOfPropertyChange(() => IsAccountVisible);
 
         }
 
-        public void Handle(LogOnEvent message)
+        //public void Handle(LogOnEvent message)
+        //{
+        //    ActivateItem(_salesVM);
+        //    NotifyOfPropertyChange(() => IsAccountVisible);
+        //}
+
+        public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken)
         {
-            ActivateItem(_salesVM);
+            await ActivateItemAsync(_salesVM,cancellationToken);
             NotifyOfPropertyChange(() => IsAccountVisible);
         }
     }

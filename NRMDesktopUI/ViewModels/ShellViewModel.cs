@@ -14,16 +14,14 @@ namespace NRMDesktopUI.ViewModels
     public class ShellViewModel : Conductor<object>,IHandle<LogOnEvent>
     {
         private IEventAggregator _events;
-        private SalesViewModel _salesVM;
         private ILoggedInUserModel _user;
         IAPIHelpers _apiHelper;
 
 
-        public ShellViewModel(IEventAggregator events,SalesViewModel saleVM, ILoggedInUserModel user, IAPIHelpers apiHelper)
+        public ShellViewModel(IEventAggregator events, ILoggedInUserModel user, IAPIHelpers apiHelper)
         {
 
             _events = events;
-            _salesVM = saleVM;
             _events.SubscribeOnPublishedThread(this);
             _user = user;
             _apiHelper = apiHelper;
@@ -70,7 +68,7 @@ namespace NRMDesktopUI.ViewModels
 
         public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken)
         {
-            await ActivateItemAsync(_salesVM,cancellationToken);
+            await ActivateItemAsync(IoC.Get<SalesViewModel>(), cancellationToken);
             NotifyOfPropertyChange(() => IsAccountVisible);
         }
     }

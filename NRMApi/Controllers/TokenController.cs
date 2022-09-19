@@ -56,7 +56,7 @@ namespace NRMApi.Controllers
                 new Claim(ClaimTypes.Name, username),
                 new Claim(ClaimTypes.NameIdentifier,user.Id),
                 new Claim(JwtRegisteredClaimNames.Nbf,new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
-                new Claim(JwtRegisteredClaimNames.Exp,new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString())
+                new Claim(JwtRegisteredClaimNames.Exp,new DateTimeOffset(DateTime.Now.AddDays(15)).ToUnixTimeSeconds().ToString())
             };
 
             foreach (var role in roles)

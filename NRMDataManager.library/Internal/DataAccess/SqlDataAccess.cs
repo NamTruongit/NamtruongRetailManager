@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,11 +15,13 @@ namespace NRMDataManager.library.Internal.DataAccess
     public class SqlDataAccess : IDisposable, ISqlDataAccess
     {
         private readonly IConfiguration _config;
+        private readonly ILogger<SqlDataAccess> _logger;
         private IDbConnection _connection;
         private IDbTransaction _transaction;
-        public SqlDataAccess(IConfiguration config)
+        public SqlDataAccess(IConfiguration config,ILogger<SqlDataAccess> logger )
         {
             _config = config;
+            _logger = logger;
         }
         public string GetConnecttionString(string name)
         {
@@ -100,8 +103,10 @@ namespace NRMDataManager.library.Internal.DataAccess
                 {
                     CommitTransaction();
                 }
-                catch
-                { }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex, "Commit transaction failed in the dispoes method");
+                }
 
             }
             _transaction = null;

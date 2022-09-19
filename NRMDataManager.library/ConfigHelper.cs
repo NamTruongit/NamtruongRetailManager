@@ -9,15 +9,15 @@ namespace NRMDataManager.library
 {
     public class ConfigHelper
     {
-            public static decimal GetTaxRate()
+        public static decimal GetTaxRate()
+        {
+            string rateText = ConfigurationManager.AppSettings["taxRate"];
+            bool IsValidTaxRate = decimal.TryParse(rateText, out decimal output);
+            if (IsValidTaxRate == false)
             {
-                string rateText = ConfigurationManager.AppSettings["taxRate"];
-                bool IsValidTaxRate = decimal.TryParse(rateText, out decimal output);
-                if (IsValidTaxRate == false)
-                {
-                    throw new ConfigurationErrorsException("This tax rate is not set up properly");
-                }
-                return output;
+                throw new ConfigurationErrorsException("This tax rate is not set up properly");
             }
+            return output;
+        }
     }
 }

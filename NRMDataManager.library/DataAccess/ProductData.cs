@@ -10,26 +10,23 @@ using System.Threading.Tasks;
 
 namespace NRMDataManager.library.DataAccess
 {
-    public class ProductData
+    public class ProductData : IProductData
     {
-        private readonly IConfiguration _config;
+        private readonly ISqlDataAccess _sql;
 
-        public ProductData(IConfiguration config)
+        public ProductData(ISqlDataAccess sql)
         {
-            _config = config;
+            _sql = sql;
         }
         public List<ProductModel> GetProduct()
         {
-            SqlDataAccess sql = new SqlDataAccess(_config);
-            var output = sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetAll", new { }, "NRMData");
+            var output = _sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetAll", new { }, "NRMData");
             return output;
-
         }
 
         public ProductModel GetProductByID(int productId)
         {
-            SqlDataAccess sql = new SqlDataAccess(_config);
-            var output = sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetById", new {Id = productId }, "NRMData").FirstOrDefault();
+            var output = _sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetById", new { Id = productId }, "NRMData").FirstOrDefault();
             return output;
         }
     }

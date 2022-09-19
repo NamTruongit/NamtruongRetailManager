@@ -13,17 +13,16 @@ namespace NRMApi.Controllers
     [Authorize]
     public class ProductController : ControllerBase
     {
-        private readonly IConfiguration _config;
+        private readonly IProductData _productData;
 
-        public ProductController(IConfiguration config)
+        public ProductController( IProductData productData)
         {
-            _config = config;
+            _productData = productData;
         }
         [HttpGet]
         public List<ProductModel> Get()
         {
-            ProductData data = new ProductData(_config);
-            return data.GetProduct();
+            return _productData.GetProduct();
         }
     }
 }

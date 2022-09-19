@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using NRMDataManager.library.Internal.DataAccess;
+﻿using NRMDataManager.library.Internal.DataAccess;
 using NRMDataManager.library.Models;
+using NRMDesktopUI.library.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,22 +9,23 @@ using System.Threading.Tasks;
 
 namespace NRMDataManager.library.DataAccess
 {
-    public class SaleData
+    public class SaleData : ISaleData
     {
-        private readonly IConfiguration _config;
+        private readonly IProductData _productData;
+        private readonly ISqlDataAccess _sql;
 
-        public SaleData(IConfiguration config)
+        public SaleData(IProductData productData,ISqlDataAccess sql)
         {
-            _config = config;
+            _productData = productData;
+            _sql = sql;
         }
 
-        public void SaveSale(SaleModel saleInfo,string cashierId)
+        public void SaveSale(SaleModel saleInfo, string cashierId)
         {
             //Make this solid/dry/better
             //Start filling in the models we will save to the database
             List<SaleDetailDBModel> details = new List<SaleDetailDBModel>();
-            ProductData products = new ProductData(_config);
-            var taxRate = ConfigHelper.GetTaxRate()/100;
+            var taxRate = ConfigHelper.GetTaxRate() / 100;
             foreach (var item in saleInfo.SaleDetails)
             {
                 var detail = new SaleDetailDBModel
@@ -32,8 +33,8 @@ namespace NRMDataManager.library.DataAccess
                     ProducID = item.ProducID,
                     Quantity = item.Quantity
                 };
-                 
-                var productInfo = products.GetProductByID(detail.ProducID);
+
+                var productInfo = _productData.GetProductByID(detail.ProducID);
 
                 if (productInfo == null)
                 {
@@ -61,37 +62,34 @@ namespace NRMDataManager.library.DataAccess
             sale.Total = sale.SubTotal * sale.Tax;
 
             //save the sale model
-            using (SqlDataAccess sql = new SqlDataAccess(_config))
+
+            try
             {
-                try
-                {
-                    sql.StartTransaction("NRMData");
-                    sql.SaveDataInTransaction<SaleDBModel>("dbo.spSale_Insert", sale);
-                    sale.Id = sql.LoadDataInTransaction<int, dynamic>("spSaleLookUp", new { sale.CashierID, sale.SaleDate }).FirstOrDefault();
+                _sql.StartTransaction("NRMData");
+                _sql.SaveDataInTransaction<SaleDBModel>("dbo.spSale_Insert", sale);
+                sale.Id = _sql.LoadDataInTransaction<int, dynamic>("spSaleLookUp", new { sale.CashierID, sale.SaleDate }).FirstOrDefault();
 
-                    // get the id from the sale table
-                    //finish filling in the sale deteil model
+                // get the id from the sale table
+                //finish filling in the sale deteil model
 
-                    foreach (var item in details)
-                    {
-                        item.SaleID = sale.Id;
-                        //save the sale detail model 
-                        sql.SaveDataInTransaction("dbo.SaleDetail_Insert", item);
-                    }
-                    sql.CommitTransaction();
-                }
-                catch 
+                foreach (var item in details)
                 {
-                    sql.RollbackTransaction();
-                    throw;
+                    item.SaleID = sale.Id;
+                    //save the sale detail model 
+                    _sql.SaveDataInTransaction("dbo.SaleDetail_Insert", item);
                 }
+                _sql.CommitTransaction();
+            }
+            catch
+            {
+                _sql.RollbackTransaction();
+                throw;
             }
         }
 
         public List<SaleReportModel> GetSaleReport()
         {
-            SqlDataAccess sql = new SqlDataAccess(_config);
-            var output = sql.LoadData<SaleReportModel, dynamic>("spSale_SaleReport", new { }, "NRMData");
+            var output = _sql.LoadData<SaleReportModel, dynamic>("spSale_SaleReport", new { }, "NRMData");
             return output;
         }
     }

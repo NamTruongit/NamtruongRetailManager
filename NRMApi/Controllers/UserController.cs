@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -23,22 +23,20 @@ namespace NRMApi.Controllers
 
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IConfiguration _config;
+        private readonly IUserData _data;
 
-        public UserController(ApplicationDbContext context,UserManager<IdentityUser> userManager, IConfiguration config)
+        public UserController(ApplicationDbContext context,UserManager<IdentityUser> userManager,IUserData data)
         {
             _context = context;
             _userManager = userManager;
-            _config = config;
+            _data = data;
         }
 
         [HttpGet]
         public UserModel GetById()
         {
             string userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserData data = new UserData(_config);
-
-            return data.GetUserById(userID).First();
+            return _data.GetUserById(userID).First();
         }
 
         [Authorize(Roles = "Admin")]

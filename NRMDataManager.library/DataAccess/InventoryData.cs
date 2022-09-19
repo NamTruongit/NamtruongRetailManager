@@ -9,25 +9,23 @@ using System.Threading.Tasks;
 
 namespace NRMDataManager.library.DataAccess
 {
-    public class InventoryData
+    public class InventoryData : IInventoryData
     {
-        private readonly IConfiguration _config;
+        private readonly ISqlDataAccess _dataAccess;
 
-        public InventoryData(IConfiguration config)
+        public InventoryData(ISqlDataAccess dataAccess)
         {
-            _config = config;
+            _dataAccess = dataAccess;
         }
         public List<InventoryModel> GetInventory()
         {
-            SqlDataAccess sql = new SqlDataAccess(_config);
-            var output = sql.LoadData<InventoryModel, dynamic>("spInventory_GetAll", new { }, "NRMData");
-            return output; 
+            var output = _dataAccess.LoadData<InventoryModel, dynamic>("spInventory_GetAll", new { }, "NRMData");
+            return output;
         }
 
         public void SaveInventoryRecord(InventoryModel item)
         {
-            SqlDataAccess sql = new SqlDataAccess(_config);
-            sql.SaveData("spInventory_Insert", item, "NRMData");
+            _dataAccess.SaveData("spInventory_Insert", item, "NRMData");
 
         }
     }

@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using NRMDataManager.library.DataAccess;
+using NRMDataManager.library.Internal.DataAccess;
 
 namespace NRMApi
 {
@@ -39,6 +41,15 @@ namespace NRMApi
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            //persernal services
+            services.AddTransient<IInventoryData, InventoryData>();
+            services.AddTransient<IProductData, ProductData>();
+            services.AddTransient<ISaleData, SaleData>();
+            services.AddTransient<IUserData, UserData>();
+            services.AddTransient<ISqlDataAccess, SqlDataAccess>();
+
+
             services.AddAuthentication(option =>
             {
                 option.DefaultAuthenticateScheme = "JwtBearer";

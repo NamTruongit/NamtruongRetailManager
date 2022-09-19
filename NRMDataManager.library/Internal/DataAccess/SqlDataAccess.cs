@@ -11,9 +11,11 @@ using System.Threading.Tasks;
 
 namespace NRMDataManager.library.Internal.DataAccess
 {
-    internal class SqlDataAccess :IDisposable
+    public class SqlDataAccess : IDisposable, ISqlDataAccess
     {
         private readonly IConfiguration _config;
+        private IDbConnection _connection;
+        private IDbTransaction _transaction;
         public SqlDataAccess(IConfiguration config)
         {
             _config = config;
@@ -42,7 +44,7 @@ namespace NRMDataManager.library.Internal.DataAccess
             {
                 connection.Execute(storeProcedure, parameters,
                     commandType: CommandType.StoredProcedure);
-              
+
             }
         }
 
@@ -51,24 +53,23 @@ namespace NRMDataManager.library.Internal.DataAccess
         //save using the transaction method
         //close connection / stop transaction method
         //dispose
-        private IDbConnection _connection;
-        private IDbTransaction _transaction;
+
 
         private bool IsClosed = false;
-        
+
 
         public List<T> LoadDataInTransaction<T, U>(string storeProcedure, U parameters)
         {
-            
-                List<T> rows = _connection.Query<T>(storeProcedure, parameters,
-                    commandType: CommandType.StoredProcedure,transaction: _transaction).ToList();
-                return rows;
+
+            List<T> rows = _connection.Query<T>(storeProcedure, parameters,
+                commandType: CommandType.StoredProcedure, transaction: _transaction).ToList();
+            return rows;
         }
 
         public void SaveDataInTransaction<T>(string storeProcedure, T parameters)
         {
-                _connection.Execute(storeProcedure, parameters,
-                    commandType: CommandType.StoredProcedure,transaction: _transaction);
+            _connection.Execute(storeProcedure, parameters,
+                commandType: CommandType.StoredProcedure, transaction: _transaction);
         }
         public void StartTransaction(string connectionStringName)
         {
@@ -81,13 +82,13 @@ namespace NRMDataManager.library.Internal.DataAccess
         public void CommitTransaction()
         {
             _transaction?.Commit();
-            _connection.Close();
+            _connection?.Close();
             IsClosed = true;
         }
         public void RollbackTransaction()
         {
             _transaction.Rollback();
-            _connection.Close();
+            _connection?.Close();
             IsClosed = true;
         }
 
@@ -100,8 +101,8 @@ namespace NRMDataManager.library.Internal.DataAccess
                     CommitTransaction();
                 }
                 catch
-                {                }
-               
+                { }
+
             }
             _transaction = null;
             _connection = null;

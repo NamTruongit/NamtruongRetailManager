@@ -16,19 +16,20 @@ namespace NRMApi.Controllers
     public class SaleController : ControllerBase
     {
         private readonly IConfiguration _config;
+        private readonly ISaleData _saleData;
 
-        public SaleController(IConfiguration config)
+        public SaleController(IConfiguration config,ISaleData saleData)
         {
             _config = config;
+            _saleData = saleData;
         }
 
         [Authorize(Roles = "Cashier")]
         [HttpPost]
         public void Post(SaleModel sale)
         {
-            SaleData data = new SaleData(_config);
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier); //Old Way with asp.net basic: RequestContext.Principal.Identity.GetUserId();
-            data.SaveSale(sale, userId);
+            _saleData.SaveSale(sale, userId);
             Console.WriteLine();
         }
         [Authorize(Roles = "Admin,Manager")]
@@ -36,8 +37,7 @@ namespace NRMApi.Controllers
         [HttpGet]
         public List<SaleReportModel> GetSaleReport()
         {
-            SaleData data = new SaleData(_config);
-            return data.GetSaleReport();
+            return _saleData.GetSaleReport();
         }
     }
 }
